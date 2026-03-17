@@ -12,7 +12,7 @@ namespace AcRepairWebsite
         
         builder.Services.AddControllersWithViews();
 
-            
+            builder.Services.AddSession();
             builder.Services.AddDbContext<AppDbContext>(options =>
                 options.UseSqlServer(
                     builder.Configuration.GetConnectionString("DefaultConnection")));
@@ -28,15 +28,20 @@ namespace AcRepairWebsite
 
             app.UseHttpsRedirection();
             app.UseRouting();
-
+            app.UseSession();
             app.UseAuthorization();
 
             app.MapStaticAssets();
 
             app.MapControllerRoute(
+             name: "home",
+             pattern: "",
+             defaults: new { controller = "Home", action = "Index" });
+
+            app.MapControllerRoute(
                 name: "default",
-                pattern: "{controller=Home}/{action=Index}/{id?}")
-                .WithStaticAssets();
+                pattern: "{controller=Home}/{action=Index}");
+               
 
             app.Run();
         }
